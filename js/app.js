@@ -1,7 +1,10 @@
 var activeSelect = {
   paintType:"exponential",
   paintProperty:"H18_POP",
-  paintStops:[[0, '#ffffcc'],[100, '#a1dab4'],[5000, '#41b6c4'],[15000, '#2c7fb8'], [40000, '#253494']]
+  paintStops:[[0, '#ffffcc'],[100, '#a1dab4'],[5000, '#41b6c4'],[15000, '#2c7fb8'], [40000, '#253494']],
+  selection:"USREP",
+  geography:"cty",
+  name:"COUNTYNAME"
 };
 
 var layersArray = []; // at 0.22.0 you can no longer have undefined layers in array - must push them dynamically
@@ -72,8 +75,8 @@ function initialize(){
               } /*layers[2] = paint object*/                             
           ]
 
-          // , 
-          //   ["TempCNG-highlighted", 'fill',["in", "DATA", ""],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": [['DFL', 'orange'],['R', 'orange']]},"fill-outline-color": "#fff","fill-opacity":1}],
+          , 
+            ["TempCNG-highlighted", 'fill',["in", "DATA", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
           //   ["TempCNG-stroke", 'line',['has','DATA'],{"line-color": '#fff',"line-width": {"stops":[[3,0.5],[10,1]]}}]           
       ];      
 
@@ -130,11 +133,31 @@ function spliceArray(a){
   }
 }
 
+function mapResults(feature){
+  // console.log(feature.layer.id)
+  switch (feature.layer.id) {
+      case "TempCNG":
+          map.setFilter("TempCNG", ["!=", "DATA",feature.properties.DATA]);
+          map.setFilter("TempCNG-highlighted", ["==", "DATA",feature.properties.DATA]);
+          break;
+      case "TempCNG-highlighted":
+          break;
+      default:
+          map.setFilter("2016results-"+activeTab.geography, ['all', ['==', 'UNIT', activeTab.geography], ["!=", activeTab.name, feature.properties[activeTab.name]]]);
+            map.setFilter("2016results-"+activeTab.geography+"-hover", ['all', ['==', 'UNIT', activeTab.geography], ["==", activeTab.name, feature.properties[activeTab.name]]]);
+    }
+}
+
 function showResults(activeSelect, featureProperties){
   console.log(activeSelect)
   var content = '';
   var header ='';
   var district = '';
+
+  var data = {
+    activeTab:activeSelect.selection,
+    geography:activeSelect.geography
+  };
   
   var attributeMap = {'AsianDisab':"Asian Disabled", "BlackDisab":"Black Disabled","LatinoDisa":"Latino Disabled", 'Native_A_1':"Native American Disabled","WhiteDisab":"White Disabled",
             'FemHHPov':"Female Head Household Poverty",
@@ -143,14 +166,61 @@ function showResults(activeSelect, featureProperties){
   header += "<h5>Results</h5>";
   content += "<tr><th>Senate District:</th><td>"+featureProperties['DATA']+"</td></tr>"
   content += "<tr><th>Senator:</th><td>"+featureProperties['name']+"</td></tr>"
-  for (attributes in featureProperties){
-    if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
-      content += "";
-    }else{
-      console.log(attributes, featureProperties[attributes])
-      content += "<tr><th>"+attributes+":</th><td>"+featureProperties[attributes]+"</td></tr>"
-    }   
-  }
+  // for (attributes in featureProperties){
+  //   if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
+  //     content += "";
+  //   }else{
+  //     console.log(attributes, featureProperties[attributes])
+  //     content += "<tr><th>"+attributes+":</th><td>"+featureProperties[attributes]+"</td></tr>"
+  //   }   
+  // }
+
+switch (activeSelect.selection) {
+    case "USREP":
+          for (attributes in featureProperties){
+              if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
+                content += "";
+              }else{
+                console.log(attributes, featureProperties[attributes])
+                content += "<tr><th>"+attributes+":</th><td>"+featureProperties[attributes]+"</td></tr>"
+              }   
+            }
+            break;
+
+    // case "MNSEN":
+        
+    //     data['district'] = feature.MNSENDIST;
+    //     content += "<tr>"+geography+"</tr>";
+    //     content += "<tr><th>"+unit+" Winner: </th><td class='winner-"+winner+"'>"+winner+" </td></tr>";
+    //     content += "<tr><th>Percentage: </th><td class='winner-"+winner+"'>"+percentage.toFixed(1)+"% </td></tr>";
+    // for (var i=0;i<partyArray.length;i++){
+    //     if(feature[activeTab.selection+partyArray[i]] > 0){
+    //       content +="<tr><th>"+partyObject[partyArray[i]]+': </th><td>'+feature[activeTab.selection+partyArray[i]].toLocaleString()+"</td></tr>";
+    //     }     
+    //   }
+    //     content += "<tr><th>Total Votes: </th><td>"+feature[activeTab.selection+'TOTAL'].toLocaleString()+"</td></tr>";
+    //     break;
+    // case "MNLEG":
+    //     $('.td-image').hide();
+    //     // $('#thirdwheel').hide();
+    //     data['district'] = feature.MNLEGDIST;
+
+    //     if(feature[activeTab.selection+'DIST'] =='32B'){
+    //       content += "<tr><td>The Minnesota Supreme Court has determined that a vacancy in nomination exists for Legislative District 32B under Minnesota Statutes 204B.13 due to a candidate being ineligible to hold the office. The Governor has issued a Writ of Special Election which schedules the election for February 14, 2017.</td><tr>";
+    //     } else {
+    //       content += "<tr>"+geography+"</tr>";
+    //       content += "<tr><th>"+unit+" Winner: </th><td class='winner-"+winner+"'>"+winner+" </td></tr>";
+    //       content += "<tr><th>Percentage: </th><td class='winner-"+winner+"'>"+percentage.toFixed(1)+"% </td></tr>";
+    //   for (var i=0;i<partyArray.length;i++){
+    //       if(feature[activeTab.selection+partyArray[i]] > 0){
+    //         content +="<tr><th>"+partyObject[partyArray[i]]+': </th><td>'+feature[activeTab.selection+partyArray[i]].toLocaleString()+"</td></tr>";
+    //       }     
+    //     }
+    //       content += "<tr><th>Total Votes: </th><td>"+feature[activeTab.selection+'TOTAL'].toLocaleString()+"</td></tr>";
+    //     }
+    //     break;
+    }
+
   $("#results").html(content);
   // district += feature.properties.SENDIST
   // content += "<tr><th>Total Votes: </th><td>"+feature[activeSelect.selection+'TOTAL'].toLocaleString()+"</td></tr>";

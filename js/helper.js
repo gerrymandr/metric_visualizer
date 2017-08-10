@@ -35,9 +35,26 @@ $( document ).ready(function() {
     var feature = (features.length) ? features[0] : '';
     // console.log(feature.properties);
     // removeLayers('pushpin');
-    // mapResults(feature);
+    mapResults(feature);
     showResults(activeSelect, feature.properties);
        
+  });
+
+    //show pointer cursor
+  map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: layersArray });
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+
+    // var feature = (features.length) ? features[0] : '';
+    // removeLayers('pushpin');
+    // showResults(activeTab, feature.properties);
+    // mapResults(feature); 
+  });
+
+   //show grab cursor
+  map.on('dragstart', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: layersArray });
+    map.getCanvas().style.cursor = (features.length) ? 'grab' : '';
   });
 
  }); //end ready
