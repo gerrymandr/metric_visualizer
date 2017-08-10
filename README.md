@@ -1,6 +1,8 @@
 ## MGGG metric visualizer
 
-
+<p align="center">
+  <img src="https://github.com/Ccantey/LCC-Minimal-UI-NYT/blob/master/img/display.jpg" alt="mimimal view" width="80%"/>
+</p>
 
 
 ### What's included?
@@ -12,4 +14,5 @@
 - Social media plugins
 
 # metric_visualizer
-# metric_visualizer
+
+solbrigm@gmail.com
