@@ -1,0 +1,304 @@
+/*Override bootstrap*/
+html, body {
+  height: 100%;
+  font-size:16px;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+
+}
+.container-fluid{
+	margin-left: 5%;
+	margin-right:5%;
+}
+.h4, h4{
+	font-size:1.5rem;
+}
+.h5, h5{
+	  font-size:1.25rem;
+}
+.lead{
+	font-size: 1.25rem;
+	font-weight: 300;
+}
+footer{
+	border-top: 1px solid #999;
+	color:#999;
+	font-size: 11px;
+	line-height:10px;
+	margin: 25px -15px;
+	padding-top: 5px;
+}
+
+
+.navbar-default{
+	background-image: none;
+	background-color:#f6f6f6;
+	border:none ;
+	box-shadow: none ;
+}
+
+.container {
+	padding:0;
+}
+.headline{
+	text-align: center;
+	margin-top:100px;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 720px;
+
+}
+.headline-title{
+	font-family: "georgia", serif;
+	font-size:43px;
+	font-weight: 300;
+}
+
+a:link {
+    color: #326891;
+    text-decoration: none;
+}
+
+a:hover {
+    /*color: #326891;*/
+    text-decoration: underline;
+}
+
+.navbar-brand{
+	padding:0;
+}
+
+#navbar{
+	float:center;
+}
+#navbar h5, #navbar a{
+	font-weight: bold;
+	color:#555;
+}
+
+.dropdown-menu{
+	margin: 25px 0 0;
+}
+.btn-group.open .dropdown-toggle {
+    box-shadow: none;
+}
+/*application CSS*/
+
+.mapbox-improve-map {
+    display: none;
+}
+.election-districts{
+	position:fixed;
+	left:0;
+	width: 100%;
+	background-color: #fff;
+	margin-top:35px;
+	padding:15px 0 0;
+	text-align: center;
+	z-index: 1001;
+	/*margin-bottom: 40px;*/
+}
+
+ul.election-navigation li{
+	display:inline-block;
+	font:400 14px/16px Helvetica, Arial, sans-serif;
+	padding:0;	
+}
+
+.election-navigation li::before {
+    background: #ccc none repeat scroll 0 0;
+    content: " ";
+    display: inline-block;
+    height: 11px;
+    margin: 0 5px;
+    position: relative;
+    top: 1px;
+    width: 1px;
+}
+
+.election-navigation li:first-child::before {
+    display: none;
+}
+
+.election-navigation li a {
+    color: #999;
+}
+
+.election-navigation-a.active {
+    text-decoration: underline;
+    color: #ed1c24;
+}
+
+.election-navigation-a:hover{
+	cursor: pointer;
+}
+
+.navbar-center img {
+    height: 23px;
+    margin: 0 10px;
+}
+
+.navbar-center{
+	/*margin-left: -5%;*/
+	text-align: center;
+}
+.navbar-center h5{
+	display:inline-block;
+	height:30px
+	margin: 5px auto auto 7px;
+	padding: 0 0 0 20px;
+}
+.navbar-center h5::before {
+    background: #ccc none repeat scroll 0 0;
+    content: " ";
+    display: inline-block;
+    height: 24px;
+    margin: 0 5px;
+    position: relative;
+    top: 7px;
+    width: 1px;
+}
+.navbar-center h5:first-child::before {
+    display:none;
+}
+
+
+.home-button{
+	position: absolute;
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.5);
+    font-family: arial,helvetica,sans-serif;
+    border:none;
+    text-transform: none;	
+}
+
+.share-group{
+	position: absolute;
+	right:7px;
+	top:15px;
+}
+
+
+.share-button{
+/*	position: relative;
+	right:7px;
+	top:10px;*/
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.5);
+    font-family: arial,helvetica,sans-serif;
+    border:none;
+    text-transform: none;	
+}
+
+#facebook a{
+	color: #3b5998;
+}
+#twitter a{
+	color:#00aced;
+}
+#linkedin a{
+	color:#006fa6;
+}
+.button-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.graphic-containter{
+	/*height:500px;*/
+}
+
+/*No affix for smaller devices*/
+.prefix{
+  position: relative !important;
+}
+
+.affix-container.affix {
+  /*left:5px;*/
+  top: 70px;
+  width: 25%;
+}
+.mapboxgl-ctrl-top-right.affix {
+  position: fixed;
+  top: 80px;
+  right:5%;
+
+}
+
+.affix-container.affix > .sidebar{
+
+  width: 80%;
+}
+
+.sidebar{	
+	padding: 0 50px 10px 0;
+}
+
+#map{
+	float:right;
+}
+.map-container{
+	border: 1px solid #e6e6e6;
+	padding:0;
+}
+
+.sidebar-search label{
+	/*display:table-row;*/
+}
+.input-group-btn{
+	display: block;
+}
+
+@media (max-width: 620px) { 
+	.container-fluid{
+		margin-left:2%;
+		margin-right:2%;
+	}
+	.navbar-center h5:first-child {
+	    display: none;
+	}
+
+	.navbar-center{
+	margin-left: 30px;
+	text-align: left:;
+   }
+   .navbar, .navbar h5{
+   	font-size: .85rem;
+   }
+}
+@media (max-width: 800px){
+	.h5, h5{
+		font-size: 1rem;
+	}
+	.affix-container.affix{
+		position:relative;
+		width:100%;
+		top:0;
+		height:100%;
+	}
+	#map{
+
+		float:none;
+	}
+
+	.mapboxgl-ctrl-top-right.affix {
+	  position: relative;
+	  top: 0;
+	  right:0;
+
+	}
+
+/*	.affix + #map{
+		height:300px !important;
+		margin-bottom: 300px;
+		float:none;
+	}*/
+	.prefix{
+		margin: 0 5%;
+	}
+}
+.winner-DFL{
+	color:steelblue;
+}
+.winner-R{
+	color:brown;
+}
