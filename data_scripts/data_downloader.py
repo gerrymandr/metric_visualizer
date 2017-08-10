@@ -6,7 +6,7 @@ from contextlib import closing
 
 
 def download_data(url, file_name, destination_dir):
-    """Downloads file_name.zip from base_url.file_name.zip, downoloads to destination_dir and extracts"""
+    """Downloads file_name.zip from base_url.file_name.zip, downloads to destination_dir"""
 
     try:
         os.stat(destination_dir)
@@ -21,10 +21,17 @@ def download_data(url, file_name, destination_dir):
         with open(dest_path, 'wb') as f:
             shutil.copyfileobj(r, f)
 
-    zip_ref = zipfile.ZipFile(dest_path, 'r')
-    print('extracting data to ')
-    zip_ref.extractall(os.path.join('RawData', file_name))
-    zip_ref.close()
+
+def extract_data(directory):
+    """unzips all zip files in a folder"""
+
+    zip_files = [f for f in os.listdir(directory) if f.endswith('.zip')]
+    for z in zip_files:
+        zip_ref = zipfile.ZipFile(os.path.join(directory, z), 'r')
+        file_name = os.path.join(directory, os.path.splitext(z)[0])
+        print('extracting data to {0}'.format(file_name))
+        zip_ref.extractall(os.path.join(directory, file_name))
+        zip_ref.close()
 
 
 if __name__ == "__main__":
@@ -37,5 +44,6 @@ if __name__ == "__main__":
     }
     for k, v in file_urls.items():
         download_data(v, k, 'RawData')
+    extract_data(destination_folder)
 
 
