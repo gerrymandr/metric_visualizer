@@ -1,9 +1,12 @@
 import shutil
-from urllib.request import urlopen
+try:
+    from urllib.request import urlopen
+except:
+    from urllib2 import urlopen
 import zipfile
 import os
-import subprocess
 from contextlib import closing
+
 
 class GerryData:
     """
@@ -52,6 +55,11 @@ class GerryData:
             zip_ref.close()
 
     def process_raw(self):
+        """"
+        1. Extract only desired columns
+        2. Rename column in uniform manner
+        3. Re-project to 4326
+        """
         shps = []
         for root, dirs, files in os.walk('RawData'):
             for file in files:
@@ -62,13 +70,16 @@ class GerryData:
             f_out = os.path.join(self.root, 'ExtractedData', os.path.basename(shp))
             self.process_file(shp, f_out, {})
 
-    def process_file(self, f_in, f_out, field_dictionary):
+    @staticmethod
+    def process_file(f_in, f_out, field_dictionary):
         """Takes in a file in_path, extracts fields based on field_dicionary,
 
         :param file: .shp file
         :param field_dictionary: dictionary of field names making explicit
         :return:
         """
+
+
         print(f_out)
 
 if __name__ == "__main__":
