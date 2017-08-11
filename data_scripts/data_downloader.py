@@ -11,9 +11,15 @@ class GerryData:
     """
     def __init__(self, root='.'):
         self.root = root
+        self.raw_dir = os.path.join(self.root, 'RawData')
+        self.extracted_dir = os.path.join(self.root, 'ExtractedData')
+        self.clean_directory()
 
     def clean_directory(self):
-        shutil.rmtree(os.path.join(self.root, 'RawData'), ignore_errors=True)
+        shutil.rmtree(self.raw_dir, ignore_errors=True)
+        shutil.rmtree(self.extracted_dir, ignore_errors=True)
+        os.mkdir(self.raw_dir)
+        os.mkdir(self.extracted_dir)
 
     def download_data(self, url, file_name):
         """Downloads file_name.zip from base_url.file_name.zip, downloads to folder RawData in root"""
@@ -56,7 +62,7 @@ class GerryData:
             f_out = os.path.join(self.root, 'ExtractedData', os.path.basename(shp))
             self.process_file(shp, f_out, {})
 
-    def process_file(f_in, f_out, field_dictionary):
+    def process_file(self, f_in, f_out, field_dictionary):
         """Takes in a file in_path, extracts fields based on field_dicionary,
 
         :param file: .shp file
@@ -67,7 +73,6 @@ class GerryData:
 
 if __name__ == "__main__":
     foo = GerryData()
-    foo.clean_directory()
     file_urls = {'C2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/congress/C2012/C2012.zip',
                  'C2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/C2002.zip',
                  'C1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip'
@@ -75,6 +80,8 @@ if __name__ == "__main__":
 
     for k, v in file_urls.items():
         foo.download_data(v, k)
+
+    foo.process_raw()
 
     # combine_data(foo)
 
