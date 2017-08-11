@@ -1,7 +1,7 @@
 var activeSelect = {
   paintType:"exponential",
   paintProperty:"Polsby-Pop",
-  paintStops:[[.25, '#ffffcc'],[.50, '#a1dab4'],[.75, '#41b6c4'],[.90, '#2c7fb8'], [1, '#253494']],
+  paintStops:[[.15, '#e66101'],[.3, '#fdb863'],[.41, '#f7f7f7'],[.52, '#b2abd2'], [.75, '#5e3c99']],
   geography:"Con",
   year:2012,
   name:"COUNTYNAME"
@@ -49,9 +49,9 @@ function initialize(){
     //map.addControl(geocoder);
 	 map.on('load', function () {
       // add vector source:
-      map.addSource('cngsen', {
+      map.addSource('mnleg_cng', {
           type: 'vector',
-          url: 'mapbox://mggg.cj685zzea0e3w2qn6ixzdputt-91we5'
+          url: 'mapbox://mggg.cj689nea60dqo2qryo5m6zsj4-0z2dc'
       });
 
      var layers = [
@@ -59,7 +59,7 @@ function initialize(){
           [
             activeSelect.geography,                  //layers[0] = id
             'fill',                     //layer[1]            
-            ['all', ['==', 'year', 2012], ["==", "FeatType", activeSelect.geography]],             //layers[2] = filter
+            ['all', ['==', 'Year', 2012], ["==", "FeatType", activeSelect.geography]],             //layers[2] = filter
             {"fill-color": {              //layers[3] = paint object
                 "type":activeSelect.paintType,
                 "property": activeSelect.paintProperty,
@@ -79,8 +79,8 @@ function addLayer(layer) {
            map.addLayer({
             "id": layer[0] +'-'+ activeSelect.year,
             "type": layer[1],
-            "source": "cngsen",
-            "source-layer": "with_metrics", //layer name in studio
+            "source": "mnleg_cng",
+            "source-layer": "final", //layer name in studio
             // "minzoom":layer[1],
             // 'maxzoom': layer[2],
             'filter': layer[2],
@@ -104,8 +104,8 @@ function mapResults(feature){
   // console.log(feature.layer.id)
   switch (feature.layer.id) {
       case activeSelect.geography+"-"+activeSelect.year:
-          map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'year', activeSelect.year], ['==', 'FeatType', activeSelect.geography],["!=", "District",feature.properties.District]]);
-          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'year', activeSelect.year], ['==', 'FeatType', activeSelect.geography],["==", "District",feature.properties.District]]);
+          map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography],["!=", "District",feature.properties.District]]);
+          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography],["==", "District",feature.properties.District]]);
           break;
       case activeSelect.geography+"-highlighted-"+activeSelect.year:
           break;
@@ -168,8 +168,8 @@ function removeLayers(c){
 
   switch (c){
     case'all':
-        map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'year', activeSelect.year], ['==', 'FeatType', activeSelect.geography]]);
-        map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'year', activeSelect.year], ['==', 'FeatType', activeSelect.geography], ["in", "District", ""]])
+        map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography]]);
+        map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography], ["in", "District", ""]])
 
         $('#results').html("");
         // $('#precinct-results').html("");

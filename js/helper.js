@@ -32,7 +32,7 @@ $('.election-navigation-a').on('click', function(e){
       activeSelect.name = $(this).data('name');        
 
         var layer = [
-          [activeSelect.geography,'fill', ['all', ['==', 'year', activeSelect.year], ['==', 'FeatType', activeSelect.geography]],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
+          [activeSelect.geography,'fill', ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography]],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
           [activeSelect.geography+"-highlighted", 'fill',['all', ["in", "District", ""], ['==', 'FeatType', activeSelect.geography],['==','Year',activeSelect.year]],{"fill-color": '#ff6600',"fill-outline-color": "#fff","fill-opacity":1}]
         ];
 
@@ -51,7 +51,7 @@ $('.election-navigation-a').on('click', function(e){
 
         activeSelect.year = parseInt($(this).val());
         var layer = [
-          [activeSelect.geography,'fill', ['all', ['==', 'year', activeSelect.year], ['==', 'FeatType', activeSelect.geography]],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
+          [activeSelect.geography,'fill', ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography]],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
           [activeSelect.geography+"-highlighted", 'fill',['all', ["in", "District", ""], ['==', 'FeatType', activeSelect.geography],['==','Year',activeSelect.year]],{"fill-color": '#ff6600',"fill-outline-color": "#fff","fill-opacity":1}]
         ];
 
@@ -62,7 +62,12 @@ $('.election-navigation-a').on('click', function(e){
       e.preventDefault();
       activeSelect.paintProperty = $(this).val();
       
-      // activeSelect.paintStops = [[0, '#ffffcc'],[.25, '#a1dab4'],[.50, '#41b6c4'],[.75, '#2c7fb8'], [1, '#253494']];
+      if (activeSelect.paintProperty=="Polsby-Pop"){
+        activeSelect.paintStops = [[.15, '#e66101'],[.3, '#fdb863'],[.41, '#f7f7f7'],[.52, '#b2abd2'], [.75, '#5e3c99']]
+      }else {
+        activeSelect.paintStops = [[.45, '#e66101'],[.71, '#fdb863'],[.8, '#f7f7f7'],[.87, '#b2abd2'], [1, '#5e3c99']];
+      }
+      
       
       
       map.setPaintProperty(activeSelect.geography+"-"+activeSelect.year, 
