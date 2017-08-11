@@ -89,7 +89,10 @@ if __name__ == "__main__":
                  'C1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip',
                  'S2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/legislative/L2012/S2012.zip',
                  'S2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S2002.zip',
-                 'S1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S1994.zip'
+                 'S1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S1994.zip',
+                 'L2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2012-1.zip',
+                 'L2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2002.zip',
+                 'L1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L1994.zip'
     }
 
     for k, v in file_urls.items():
