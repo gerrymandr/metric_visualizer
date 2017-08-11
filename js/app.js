@@ -22,16 +22,16 @@ function initialize(){
   }
   
   southWest = new mapboxgl.LngLat( -104.7140625, 41.86956);
-    northEast = new mapboxgl.LngLat( -84.202832, 50.1487464);
-    bounds = new mapboxgl.LngLatBounds(southWest,northEast);
+  northEast = new mapboxgl.LngLat( -84.202832, 50.1487464);
+  bounds = new mapboxgl.LngLatBounds(southWest,northEast);
 
-    // mapboxgl.accessToken = 'Your Mapbox access token';
-    mapboxgl.accessToken = 'pk.eyJ1IjoiY2NhbnRleSIsImEiOiJjaWVsdDNubmEwMGU3czNtNDRyNjRpdTVqIn0.yFaW4Ty6VE3GHkrDvdbW6g';
+  // mapboxgl.accessToken = 'Your Mapbox access token';
+  mapboxgl.accessToken = 'pk.eyJ1IjoibWdnZyIsImEiOiJjajY2cWw0ODUyaHI2MnFwOGl0bmdtMGowIn0.PLDk2t2DUJ87obtje8Ce_g';
 
   map = new mapboxgl.Map({
     container: 'map', // container id
     // style: 'mapbox://styles/mapbox/dark-v9',
-    style: 'mapbox://styles/ccantey/ciqxtkg700003bqnleojbxy8t',
+    style: 'mapbox://styles/mggg/cj66qmslq7fh82ss33qbqlxoc',
     center: [-93.6678,46.50],
     maxBounds:bounds,   
     zoom: 6,
@@ -56,10 +56,9 @@ function initialize(){
       });
 
      var layers = [
-            //name, minzoom, maxzoom, filter, paint fill-color, stops, paint fill-opacity, stops
-            
+            //name, minzoom, maxzoom, filter, paint fill-color, stops, paint fill-opacity, stops            
           [
-            'TempCNG',                  //layers[0] = id
+            activeSelect.geography,                  //layers[0] = id
             'fill',                     //layer[1]
             ['==','Year',2012],             //layers[2] = filter
             {"fill-color": {              //layers[3] = paint object
@@ -73,7 +72,7 @@ function initialize(){
           ]
 
           , 
-            ["TempCNG-highlighted", 'fill',["in", "DISTRICT", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
+            [activeSelect.geography+"-highlighted", 'fill',["in", "DISTRICT", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
           //   ["TempCNG-stroke", 'line',['has','DATA'],{"line-color": '#fff',"line-width": {"stops":[[3,0.5],[10,1]]}}]           
       ];      
 
@@ -84,7 +83,7 @@ function initialize(){
 function addLayer(layer) {
              
            map.addLayer({
-            "id": layer[0],
+            "id": layer[0] +'-'+ activeSelect.year,
             "type": layer[1],
             "source": "TempCNG",
             "source-layer": "con_simp", //layer name in studio
@@ -94,7 +93,8 @@ function addLayer(layer) {
             "layout": {},
             "paint": layer[3],
            }, 'waterway-label');
-           layersArray.push(layer[0]);
+           
+           layersArray.push(layer[0] +'-'+ activeSelect.year);
            
 };
 
@@ -109,11 +109,11 @@ function spliceArray(a){
 function mapResults(feature){
   // console.log(feature.layer.id)
   switch (feature.layer.id) {
-      case "TempCNG":
-          map.setFilter("TempCNG", ['all', ['==', 'Year', 2012], ["!=", "DISTRICT",feature.properties.DISTRICT]]);
-          map.setFilter("TempCNG-highlighted", ['all', ['==', 'Year', 2012], ["==", "DISTRICT",feature.properties.DISTRICT]]);
+      case activeSelect.geography+"-"+activeSelect.year:
+          map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', 2012], ["!=", "DISTRICT",feature.properties.DISTRICT]]);
+          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', 2012], ["==", "DISTRICT",feature.properties.DISTRICT]]);
           break;
-      case "TempCNG-highlighted":
+      case activeSelect.geography+"-highlighted-"+activeSelect.year:
           break;
       default:
           // map.setFilter("2016results-"+activeTab.geography, ['all', ['==', 'UNIT', activeTab.geography], ["!=", activeTab.name, feature.properties[activeTab.name]]]);

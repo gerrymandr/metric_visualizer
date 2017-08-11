@@ -27,6 +27,11 @@ $( document ).ready(function() {
     	console.log(activeSelect);
     })
 
+    $('#dropyear').on('change', function(e){
+      activeSelect.year = parseInt($(this).val());
+
+    })
+
   //mousemove is too slow
   map.on('click', function (e) {
     // console.log(e.point)
