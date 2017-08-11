@@ -159,44 +159,47 @@ switch (activeSelect.geography) {
             }
             break;
 
-    // case "MNSEN":
-        
-    //     data['district'] = feature.MNSENDIST;
-    //     content += "<tr>"+geography+"</tr>";
-    //     content += "<tr><th>"+unit+" Winner: </th><td class='winner-"+winner+"'>"+winner+" </td></tr>";
-    //     content += "<tr><th>Percentage: </th><td class='winner-"+winner+"'>"+percentage.toFixed(1)+"% </td></tr>";
-    // for (var i=0;i<partyArray.length;i++){
-    //     if(feature[activeTab.selection+partyArray[i]] > 0){
-    //       content +="<tr><th>"+partyObject[partyArray[i]]+': </th><td>'+feature[activeTab.selection+partyArray[i]].toLocaleString()+"</td></tr>";
-    //     }     
-    //   }
-    //     content += "<tr><th>Total Votes: </th><td>"+feature[activeTab.selection+'TOTAL'].toLocaleString()+"</td></tr>";
-    //     break;
-    // case "MNLEG":
-    //     $('.td-image').hide();
-    //     // $('#thirdwheel').hide();
-    //     data['district'] = feature.MNLEGDIST;
 
-    //     if(feature[activeTab.selection+'DIST'] =='32B'){
-    //       content += "<tr><td>The Minnesota Supreme Court has determined that a vacancy in nomination exists for Legislative District 32B under Minnesota Statutes 204B.13 due to a candidate being ineligible to hold the office. The Governor has issued a Writ of Special Election which schedules the election for February 14, 2017.</td><tr>";
-    //     } else {
-    //       content += "<tr>"+geography+"</tr>";
-    //       content += "<tr><th>"+unit+" Winner: </th><td class='winner-"+winner+"'>"+winner+" </td></tr>";
-    //       content += "<tr><th>Percentage: </th><td class='winner-"+winner+"'>"+percentage.toFixed(1)+"% </td></tr>";
-    //   for (var i=0;i<partyArray.length;i++){
-    //       if(feature[activeTab.selection+partyArray[i]] > 0){
-    //         content +="<tr><th>"+partyObject[partyArray[i]]+': </th><td>'+feature[activeTab.selection+partyArray[i]].toLocaleString()+"</td></tr>";
-    //       }     
-    //     }
-    //       content += "<tr><th>Total Votes: </th><td>"+feature[activeTab.selection+'TOTAL'].toLocaleString()+"</td></tr>";
-    //     }
-    //     break;
     }
 
   $("#results").html(content);
   // district += feature.properties.SENDIST
   // content += "<tr><th>Total Votes: </th><td>"+feature[activeSelect.selection+'TOTAL'].toLocaleString()+"</td></tr>";
 
+}
+
+function removeLayers(c){
+
+  switch (c){
+    case'all':
+        map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['==','Year',activeSelect.year]);
+          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ["in", "DISTRICT", ""])
+          
+        $('#results').html("");
+        // $('#precinct-results').html("");
+        $('#clear').hide();
+
+        // if(activeTab.selection == 'USPRS' || activeTab.selection == 'USSEN'){
+        //   $('#candidate-table').show();
+        // } else{
+        //   $('#candidate-table').hide();
+        // }
+    //remove old pushpin and previous selected district layers 
+    if (typeof map.getSource('pointclick') !== "undefined" ){ 
+      // console.log('remove previous marker');
+      map.removeLayer('pointclick');    
+      map.removeSource('pointclick');
+    }   
+    break;    
+    case 'pushpin':
+    //remove old pushpin and previous selected district layers 
+    if (typeof map.getSource('pointclick') !== "undefined" ){ 
+      // console.log('remove previous marker');
+      map.removeLayer('pointclick');    
+      map.removeSource('pointclick');
+    }
+    break;
+  }    
 }
 
 

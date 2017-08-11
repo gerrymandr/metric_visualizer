@@ -1,16 +1,21 @@
 $( document ).ready(function() {
 	//kickoff map logic
     initialize();
+    $('#clear').hide();
 
     // $('.mapboxgl-ctrl-top-right').affix({
     //   offset: {
     //     top: 210
     //   }
     // });
+    $('#clear').on('click', function(){
+    removeLayers('all');
 
+  })
 
     $('.election-navigation-a').on('click', function(e){
     	e.preventDefault();
+      $('#clear').hide();
       //remove previous selections map methods give an example of how one would toggle layers
       document.getElementById('features').innerHTML = "";
       // map.removeLayer("2012results-"+ activeTab.geography);
@@ -29,6 +34,7 @@ $( document ).ready(function() {
 
     $('#dropyear').on('change', function(e){
       e.preventDefault();
+      $('#clear').hide();
       //remove previous selections map methods give an example of how one would toggle layers
       document.getElementById('features').innerHTML = "";
       map.removeLayer(activeSelect.geography+"-"+activeSelect.year);
@@ -82,6 +88,7 @@ $( document ).ready(function() {
 
   //mousemove is too slow
   map.on('click', function (e) {
+    $('#clear').show();
     // console.log(e.point)
     var features = map.queryRenderedFeatures(e.point,{ layers: layersArray }); //queryRenderedFeatures returns an array
     // var feature = features[0];
@@ -118,15 +125,15 @@ $( document ).ready(function() {
       $('#clear').hide();
       // document.getElementById('precinct-header').innerHTML = "";
       // document.getElementById('precinct-results').innerHTML = "";
-      map.removeLayer("2016results-"+ activeTab.geography);
-      map.removeLayer("2016results-"+ activeTab.geography+"-hover");
-      spliceArray("2016results-"+ activeTab.geography);
-      spliceArray("2016results-"+ activeTab.geography+"-hover");
-      map.setLayoutProperty(activeTab.geography + '-symbols', 'visibility', 'none');
-      map.setLayoutProperty(activeTab.geography + '-lines', 'visibility', 'none');
+      // map.removeLayer("2016results-"+ activeTab.geography);
+      // map.removeLayer("2016results-"+ activeTab.geography+"-hover");
+      // spliceArray("2016results-"+ activeTab.geography);
+      // spliceArray("2016results-"+ activeTab.geography+"-hover");
+      // map.setLayoutProperty(activeTab.geography + '-symbols', 'visibility', 'none');
+      // map.setLayoutProperty(activeTab.geography + '-lines', 'visibility', 'none');
       //remove any vtd selection
-      map.setFilter("2016results-vtd", ['all', ['==', 'UNIT', 'vtd'], ["!=", "VTD",'any']]);
-      map.setFilter("2016results-vtd-hover", ['all', ['==', 'UNIT', 'vtd'], ["==", "VTD",'all']]);
+      // map.setFilter("2016results-vtd", ['all', ['==', 'UNIT', 'vtd'], ["!=", "VTD",'any']]);
+      // map.setFilter("2016results-vtd-hover", ['all', ['==', 'UNIT', 'vtd'], ["==", "VTD",'all']]);
 
       $('.election-navigation-a').removeClass('active');
         
