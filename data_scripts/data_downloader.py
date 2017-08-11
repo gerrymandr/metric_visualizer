@@ -86,7 +86,10 @@ if __name__ == "__main__":
     foo = GerryData()
     file_urls = {'C2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/congress/C2012/C2012.zip',
                  'C2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/C2002.zip',
-                 'C1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip'
+                 'C1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip',
+                 'S2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/legislative/L2012/S2012.zip',
+                 'S2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S2002.zip',
+                 'S1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S1994.zip'
     }
 
     for k, v in file_urls.items():
