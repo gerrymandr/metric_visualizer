@@ -2,6 +2,7 @@ import shutil
 from urllib.request import urlopen
 import zipfile
 import os
+import subprocess
 from contextlib import closing
 
 
@@ -34,16 +35,32 @@ def extract_data(directory):
         zip_ref.close()
 
 
+def combine_data(file_list):
+    output_file = os.path.join('RawData', 'joined.geojson')
+    input_file = os.path.join('RawData', 'C1994', 'con94.shp')
+    sql = "SELECT AREA as Area, POPULATION as Population, DISTRICT as District FROM {}".format('C1994')
+    command = ['ogr2ogr', '-f', 'GeoJSON', '-sql', sql,
+               output_file,  input_file]
+    subprocess.check_call(command)
+
 if __name__ == "__main__":
     destination_folder = os.path.join(os.getcwd(), 'RawData')
     print(destination_folder)
-    shutil.rmtree(destination_folder, ignore_errors=True)
+    #shutil.rmtree(destination_folder, ignore_errors=True)
     file_urls = {'C2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/congress/C2012/C2012.zip',
                  'C2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/C2002.zip',
                  'C1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip'
     }
-    for k, v in file_urls.items():
-        download_data(v, k, 'RawData')
-    extract_data(destination_folder)
+    #for k, v in file_urls.items():
+    #    download_data(v, k, 'RawData')
+    #extract_data(destination_folder)
+
+    foo = []
+    for root, dirs, files in os.walk('RawData'):
+        for file in files:
+            if file.endswith('.shp'):
+                foo.append(file)
+
+    combine_data(foo)
 
 
