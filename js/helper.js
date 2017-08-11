@@ -2,11 +2,13 @@ $( document ).ready(function() {
 	//kickoff map logic
     initialize();
 
-    $('.mapboxgl-ctrl-top-right').affix({
-      offset: {
-        top: 210
-      }
-    })
+    // $('.mapboxgl-ctrl-top-right').affix({
+    //   offset: {
+    //     top: 210
+    //   }
+    // });
+
+
     $('.election-navigation-a').on('click', function(e){
     	e.preventDefault();
       //remove previous selections map methods give an example of how one would toggle layers
@@ -19,10 +21,68 @@ $( document ).ready(function() {
       
       //add new selections
     	$(this).addClass('active');
-    	activeTab.selection = $(this).data('district');
-      activeTab.geography = $(this).data('geography');
-      activeTab.name = $(this).data('name');
-    	console.log(activeTab);
+    	activeSelect.selection = $(this).data('district');
+      activeSelect.geography = $(this).data('geography');
+      activeSelect.name = $(this).data('name');
+    	console.log(activeSelect);
     })
 
- });
+  //mousemove is too slow
+  map.on('click', function (e) {
+    // console.log(e.point)
+    var features = map.queryRenderedFeatures(e.point,{ layers: layersArray }); //queryRenderedFeatures returns an array
+    // var feature = features[0];
+    var feature = (features.length) ? features[0] : '';
+    // console.log(feature.properties);
+    // removeLayers('pushpin');
+    mapResults(feature);
+    showResults(activeSelect, feature.properties);
+       
+  });
+
+    //show pointer cursor
+  map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: layersArray });
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+
+    // var feature = (features.length) ? features[0] : '';
+    // removeLayers('pushpin');
+    // showResults(activeTab, feature.properties);
+    // mapResults(feature); 
+  });
+
+   //show grab cursor
+  map.on('dragstart', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: layersArray });
+    map.getCanvas().style.cursor = (features.length) ? 'grab' : '';
+  });
+
+
+
+    $('.election-navigation-a').on('click', function(e){
+      e.preventDefault();
+      //remove previous layers
+      $('#clear').hide();
+      // document.getElementById('precinct-header').innerHTML = "";
+      // document.getElementById('precinct-results').innerHTML = "";
+      map.removeLayer("2016results-"+ activeTab.geography);
+      map.removeLayer("2016results-"+ activeTab.geography+"-hover");
+      spliceArray("2016results-"+ activeTab.geography);
+      spliceArray("2016results-"+ activeTab.geography+"-hover");
+      map.setLayoutProperty(activeTab.geography + '-symbols', 'visibility', 'none');
+      map.setLayoutProperty(activeTab.geography + '-lines', 'visibility', 'none');
+      //remove any vtd selection
+      map.setFilter("2016results-vtd", ['all', ['==', 'UNIT', 'vtd'], ["!=", "VTD",'any']]);
+      map.setFilter("2016results-vtd-hover", ['all', ['==', 'UNIT', 'vtd'], ["==", "VTD",'all']]);
+
+      $('.election-navigation-a').removeClass('active');
+        
+      //add new selections
+      $(this).addClass('active');
+      activeTab.selection = $(this).data('district');
+      activeTab.geography = $(this).data('geography');
+      activeTab.name = $(this).data('name');
+      changeData(activeTab);
+    });
+
+ }); //end ready
