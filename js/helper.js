@@ -57,4 +57,32 @@ $( document ).ready(function() {
     map.getCanvas().style.cursor = (features.length) ? 'grab' : '';
   });
 
+
+
+    $('.election-navigation-a').on('click', function(e){
+      e.preventDefault();
+      //remove previous layers
+      $('#clear').hide();
+      // document.getElementById('precinct-header').innerHTML = "";
+      // document.getElementById('precinct-results').innerHTML = "";
+      map.removeLayer("2016results-"+ activeTab.geography);
+      map.removeLayer("2016results-"+ activeTab.geography+"-hover");
+      spliceArray("2016results-"+ activeTab.geography);
+      spliceArray("2016results-"+ activeTab.geography+"-hover");
+      map.setLayoutProperty(activeTab.geography + '-symbols', 'visibility', 'none');
+      map.setLayoutProperty(activeTab.geography + '-lines', 'visibility', 'none');
+      //remove any vtd selection
+      map.setFilter("2016results-vtd", ['all', ['==', 'UNIT', 'vtd'], ["!=", "VTD",'any']]);
+      map.setFilter("2016results-vtd-hover", ['all', ['==', 'UNIT', 'vtd'], ["==", "VTD",'all']]);
+
+      $('.election-navigation-a').removeClass('active');
+        
+      //add new selections
+      $(this).addClass('active');
+      activeTab.selection = $(this).data('district');
+      activeTab.geography = $(this).data('geography');
+      activeTab.name = $(this).data('name');
+      changeData(activeTab);
+    });
+
  }); //end ready

@@ -1,9 +1,10 @@
 var activeSelect = {
   paintType:"exponential",
-  paintProperty:"H18_POP",
-  paintStops:[[0, '#ffffcc'],[100, '#a1dab4'],[5000, '#41b6c4'],[15000, '#2c7fb8'], [40000, '#253494']],
+  paintProperty:"measure2",
+  paintStops:[[0, '#ffffcc'],[.25, '#a1dab4'],[.50, '#41b6c4'],[.75, '#2c7fb8'], [1, '#253494']],
   selection:"USREP",
-  geography:"cty",
+  geography:"cng",
+  year:2012,
   name:"COUNTYNAME"
 };
 
@@ -51,32 +52,28 @@ function initialize(){
       // add vector source:
       map.addSource('TempCNG', {
           type: 'vector',
-          url: 'mapbox://mggg.cj66quep22g7q2wq72d9wgku6-6olxj'
+          url: 'mapbox://mggg.cj66ztmft005x2qmzf6qi6dlk-6n0t8'
       });
-
-   // var paintType = 'categorical';
-  //    var paintProperty = 'party';//we'll pull that from dropdown
-  //    var paintStops = [['DFL', '#6582ac'],['R', '#cc7575']];
 
      var layers = [
             //name, minzoom, maxzoom, filter, paint fill-color, stops, paint fill-opacity, stops
             
           [
             'TempCNG',                  //layers[0] = id
-            'fill',                          //layer[1]
-            ['has','DATA'],             //layers[2] = filter
-          {"fill-color": {        //layers[3] = paint object
-            "type":activeSelect.paintType,
-            "property": activeSelect.paintProperty,
-            "stops": activeSelect.paintStops
-            }, 
+            'fill',                     //layer[1]
+            ['==','Year',2012],             //layers[2] = filter
+            {"fill-color": {              //layers[3] = paint object
+                "type":activeSelect.paintType,
+                "property": activeSelect.paintProperty,
+                "stops": activeSelect.paintStops
+                }, 
             "fill-outline-color": "#fff",
                   "fill-opacity":0.75
-              } /*layers[2] = paint object*/                             
+            }                             
           ]
 
           , 
-            ["TempCNG-highlighted", 'fill',["in", "DATA", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
+            ["TempCNG-highlighted", 'fill',["in", "DISTRICT", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
           //   ["TempCNG-stroke", 'line',['has','DATA'],{"line-color": '#fff',"line-width": {"stops":[[3,0.5],[10,1]]}}]           
       ];      
 
@@ -84,46 +81,22 @@ function initialize(){
   });//end map on load
 } //end initialize
 
-function addMarker(e){
-   removeLayers('pushpin');
-
-   map.once('zoomend', function(){
-       //project latlong to screen pixels for qRF()
-       var center = map.project([e.coordinates[0],e.coordinates[1]])      
-       var features = map.queryRenderedFeatures(center,{ layers: ["2016results-vtd"] }); //queryRenderedFeatures returns an array
-       var feature = (features.length) ? features[0] : '';
-       showResults(activeSelect, feature.properties);
-       mapResults(feature);
-   });
-
-    //add marker
-  map.addSource("pointclick", {
-      "type": "geojson",
-      "data": {
-        "type": "Feature",
-        "geometry": {
-            "type": "Point",
-            "coordinates": e.coordinates
-        },
-        "properties": {
-            "title": "mouseclick",
-            "marker-symbol": "myMarker-Blue-Shadow"
-        }
-      }
-  });
-
-    map.addLayer({
-        "id": "pointclick",
-        type: 'symbol',
-        source: 'pointclick',
-        "layout": {
-          "icon-image": "{marker-symbol}",
-          "icon-size":1,
-          "icon-offset": [0, -13]
-        },
-        "paint": {}
-    });
-}
+function addLayer(layer) {
+             
+           map.addLayer({
+            "id": layer[0],
+            "type": layer[1],
+            "source": "TempCNG",
+            "source-layer": "con_simp", //layer name in studio
+            // "minzoom":layer[1],
+            // 'maxzoom': layer[2],
+            'filter': layer[2],
+            "layout": {},
+            "paint": layer[3],
+           }, 'waterway-label');
+           layersArray.push(layer[0]);
+           
+};
 
 //remove layersArray element per 0.22.0
 function spliceArray(a){
@@ -137,14 +110,14 @@ function mapResults(feature){
   // console.log(feature.layer.id)
   switch (feature.layer.id) {
       case "TempCNG":
-          map.setFilter("TempCNG", ["!=", "DATA",feature.properties.DATA]);
-          map.setFilter("TempCNG-highlighted", ["==", "DATA",feature.properties.DATA]);
+          map.setFilter("TempCNG", ['all', ['==', 'Year', 2012], ["!=", "DISTRICT",feature.properties.DISTRICT]]);
+          map.setFilter("TempCNG-highlighted", ['all', ['==', 'Year', 2012], ["==", "DISTRICT",feature.properties.DISTRICT]]);
           break;
       case "TempCNG-highlighted":
           break;
       default:
-          map.setFilter("2016results-"+activeTab.geography, ['all', ['==', 'UNIT', activeTab.geography], ["!=", activeTab.name, feature.properties[activeTab.name]]]);
-            map.setFilter("2016results-"+activeTab.geography+"-hover", ['all', ['==', 'UNIT', activeTab.geography], ["==", activeTab.name, feature.properties[activeTab.name]]]);
+          // map.setFilter("2016results-"+activeTab.geography, ['all', ['==', 'UNIT', activeTab.geography], ["!=", activeTab.name, feature.properties[activeTab.name]]]);
+          //   map.setFilter("2016results-"+activeTab.geography+"-hover", ['all', ['==', 'UNIT', activeTab.geography], ["==", activeTab.name, feature.properties[activeTab.name]]]);
     }
 }
 
@@ -164,7 +137,7 @@ function showResults(activeSelect, featureProperties){
                         'AsianEmplo':"Asian Employed",'BlackEmplo':"Black Empolyed","LatinoEmpl":"Latino Employed","Native_Ame":"Native American Employed",'WhiteEmplo':"White Emplyed",
                       'MNTaxes':"MN Taxes",'TotalIncom':"Total Income"}
   header += "<h5>Results</h5>";
-  content += "<tr><th>Senate District:</th><td>"+featureProperties['DATA']+"</td></tr>"
+  content += "<tr><th>Senate District:</th><td>"+featureProperties['DISTRICT']+"</td></tr>"
   content += "<tr><th>Senator:</th><td>"+featureProperties['name']+"</td></tr>"
   // for (attributes in featureProperties){
   //   if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
@@ -181,7 +154,7 @@ switch (activeSelect.selection) {
               if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
                 content += "";
               }else{
-                console.log(attributes, featureProperties[attributes])
+                // console.log(attributes, featureProperties[attributes])
                 content += "<tr><th>"+attributes+":</th><td>"+featureProperties[attributes]+"</td></tr>"
               }   
             }
@@ -227,18 +200,6 @@ switch (activeSelect.selection) {
 
 }
 
-function addLayer(layer) {
-             
-           map.addLayer({
-            "id": layer[0],
-            "type": layer[1],
-            "source": "TempCNG",
-            "source-layer": "MNGD2016", //layer name in studio
-            // "minzoom":layer[1],
-            // 'maxzoom': layer[2],
-            'filter': layer[2],
-            "layout": {},
-            "paint": layer[3],
-           }, 'waterway-label');
-           layersArray.push(layer[0])
-}; 
+ 
+
+
