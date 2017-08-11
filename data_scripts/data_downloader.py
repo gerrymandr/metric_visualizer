@@ -96,6 +96,8 @@ if __name__ == "__main__":
         foo.download_data(v, k)
 
     foo.process_raw()
+    os.rename(os.path.join(foo.raw_dir, 'C2002', 'C2002.DBF'),
+              os.path.join(foo.raw_dir, 'C2002', 'c2002.dbf'))
 
     # combine_data(foo)
 
