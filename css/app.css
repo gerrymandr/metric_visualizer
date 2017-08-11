@@ -7,15 +7,27 @@ html, body {
 }
 
 #results{
-	font-size:10px;
+	font-size:12px;
 }
 #dropyear{
 	position: absolute;
 	z-index:2;
-	left:28%;
+	left:25%;
 }
 #dropcompactness{
 	margin-left:63px;
+}
+
+#clear{
+	position:relative;
+	float:right;
+	cursor: pointer;
+	font-size: 0.75rem;
+	color: #d64f4f;
+}
+
+#clear:hover{
+	color:#aaa;
 }
 
 .container-fluid{
@@ -230,15 +242,33 @@ ul.election-navigation li{
   top: 70px;
   width: 25%;
 }
+
+
+.affix-container.affix-bottom {
+	position: absolute;
+  /*left:5px;*/
+  margin-top: 0;
+  /*width: 25%;*/
+}
 .mapboxgl-ctrl-top-right.affix {
   position: fixed;
   top: 80px;
   right:5%;
+}
 
+#legend.affix{
+  position: fixed;
+  top: 90px;
+  right:calc(5% + 50px);
 }
 
 .affix-container.affix > .sidebar{
 
+  width: 90%;
+}
+
+.affix-container.affix-bottom > .sidebar{
+  padding: 0 15px 10px 0;
   width: 80%;
 }
 

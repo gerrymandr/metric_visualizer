@@ -1,8 +1,8 @@
 var activeSelect = {
   paintType:"exponential",
-  paintProperty:"measure2",
-  paintStops:[[0, '#ffffcc'],[.25, '#a1dab4'],[.50, '#41b6c4'],[.75, '#2c7fb8'], [1, '#253494']],
-  geography:"cng",
+  paintProperty:"Polsby-Pop",
+  paintStops:[[.15, '#e66101'],[.3, '#fdb863'],[.41, '#f7f7f7'],[.52, '#b2abd2'], [.75, '#5e3c99']],
+  geography:"Con",
   year:2012,
   name:"COUNTYNAME"
 };
@@ -49,17 +49,17 @@ function initialize(){
     //map.addControl(geocoder);
 	 map.on('load', function () {
       // add vector source:
-      map.addSource('TempCNG', {
+      map.addSource('mnleg_cng', {
           type: 'vector',
-          url: 'mapbox://mggg.cj66ztmft005x2qmzf6qi6dlk-6n0t8'
+          url: 'mapbox://mggg.cj689nea60dqo2qryo5m6zsj4-0z2dc'
       });
 
      var layers = [
             //name, minzoom, maxzoom, filter, paint fill-color, stops, paint fill-opacity, stops            
           [
             activeSelect.geography,                  //layers[0] = id
-            'fill',                     //layer[1]
-            ['==','Year',2012],             //layers[2] = filter
+            'fill',                     //layer[1]            
+            ['all', ['==', 'Year', 2012], ["==", "FeatType", activeSelect.geography]],             //layers[2] = filter
             {"fill-color": {              //layers[3] = paint object
                 "type":activeSelect.paintType,
                 "property": activeSelect.paintProperty,
@@ -67,13 +67,8 @@ function initialize(){
                 }, 
             "fill-outline-color": "#fff",
                   "fill-opacity":0.75
-            }                             
-          ]
-
-          , 
-            [activeSelect.geography+"-highlighted", 'fill',["in", "DISTRICT", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
-          //   ["TempCNG-stroke", 'line',['has','DATA'],{"line-color": '#fff',"line-width": {"stops":[[3,0.5],[10,1]]}}]           
-      ];      
+            }], 
+            [activeSelect.geography+"-highlighted", 'fill',["in", "District", ""],{"fill-color": '#ff6600',"fill-outline-color": "#fff","fill-opacity":1}]]      
 
         layers.forEach(addLayer);
   });//end map on load
@@ -84,8 +79,8 @@ function addLayer(layer) {
            map.addLayer({
             "id": layer[0] +'-'+ activeSelect.year,
             "type": layer[1],
-            "source": "TempCNG",
-            "source-layer": "con_simp", //layer name in studio
+            "source": "mnleg_cng",
+            "source-layer": "final", //layer name in studio
             // "minzoom":layer[1],
             // 'maxzoom': layer[2],
             'filter': layer[2],
@@ -109,8 +104,8 @@ function mapResults(feature){
   // console.log(feature.layer.id)
   switch (feature.layer.id) {
       case activeSelect.geography+"-"+activeSelect.year:
-          map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ["!=", "DISTRICT",feature.properties.DISTRICT]]);
-          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ["==", "DISTRICT",feature.properties.DISTRICT]]);
+          map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography],["!=", "District",feature.properties.District]]);
+          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography],["==", "District",feature.properties.District]]);
           break;
       case activeSelect.geography+"-highlighted-"+activeSelect.year:
           break;
@@ -131,72 +126,76 @@ function showResults(activeSelect, featureProperties){
     geography:activeSelect.geography
   };
   
-  var attributeMap = {'AsianDisab':"Asian Disabled", "BlackDisab":"Black Disabled","LatinoDisa":"Latino Disabled", 'Native_A_1':"Native American Disabled","WhiteDisab":"White Disabled",
-            'FemHHPov':"Female Head Household Poverty",
-                        'AsianEmplo':"Asian Employed",'BlackEmplo':"Black Empolyed","LatinoEmpl":"Latino Employed","Native_Ame":"Native American Employed",'WhiteEmplo':"White Emplyed",
-                      'MNTaxes':"MN Taxes",'TotalIncom':"Total Income"}
+  // var attributeMap = {'AsianDisab':"Asian Disabled", "BlackDisab":"Black Disabled","LatinoDisa":"Latino Disabled", 'Native_A_1':"Native American Disabled","WhiteDisab":"White Disabled",
+  //           'FemHHPov':"Female Head Household Poverty",
+  //                       'AsianEmplo':"Asian Employed",'BlackEmplo':"Black Empolyed","LatinoEmpl":"Latino Employed","Native_Ame":"Native American Employed",'WhiteEmplo':"White Emplyed",
+  //                     'MNTaxes':"MN Taxes",'TotalIncom':"Total Income"}
   header += "<h5>Results</h5>";
-  content += "<tr><th>Senate District:</th><td>"+featureProperties['DISTRICT']+"</td></tr>"
-  content += "<tr><th>Senator:</th><td>"+featureProperties['name']+"</td></tr>"
-  // for (attributes in featureProperties){
-  //   if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
-  //     content += "";
-  //   }else{
-  //     console.log(attributes, featureProperties[attributes])
-  //     content += "<tr><th>"+attributes+":</th><td>"+featureProperties[attributes]+"</td></tr>"
-  //   }   
-  // }
+  // content += "<tr><th>Senate District:</th><td>"+featureProperties['District']+"</td></tr>"
+  // content += "<tr><th>Senator:</th><td>"+featureProperties['name']+"</td></tr>"
 
-switch (activeSelect.geography) {
-    case "cng":
-          for (attributes in featureProperties){
-              if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
+for (attributes in featureProperties){
+              if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
                 content += "";
               }else{
                 // console.log(attributes, featureProperties[attributes])
                 content += "<tr><th>"+attributes+":</th><td>"+featureProperties[attributes]+"</td></tr>"
               }   
             }
-            break;
 
-    // case "MNSEN":
-        
-    //     data['district'] = feature.MNSENDIST;
-    //     content += "<tr>"+geography+"</tr>";
-    //     content += "<tr><th>"+unit+" Winner: </th><td class='winner-"+winner+"'>"+winner+" </td></tr>";
-    //     content += "<tr><th>Percentage: </th><td class='winner-"+winner+"'>"+percentage.toFixed(1)+"% </td></tr>";
-    // for (var i=0;i<partyArray.length;i++){
-    //     if(feature[activeTab.selection+partyArray[i]] > 0){
-    //       content +="<tr><th>"+partyObject[partyArray[i]]+': </th><td>'+feature[activeTab.selection+partyArray[i]].toLocaleString()+"</td></tr>";
-    //     }     
-    //   }
-    //     content += "<tr><th>Total Votes: </th><td>"+feature[activeTab.selection+'TOTAL'].toLocaleString()+"</td></tr>";
-    //     break;
-    // case "MNLEG":
-    //     $('.td-image').hide();
-    //     // $('#thirdwheel').hide();
-    //     data['district'] = feature.MNLEGDIST;
+// switch (activeSelect.geography) {
+//     case "cng":
+//           for (attributes in featureProperties){
+//               if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
+//                 content += "";
+//               }else{
+//                 // console.log(attributes, featureProperties[attributes])
+//                 content += "<tr><th>"+attributes+":</th><td>"+featureProperties[attributes]+"</td></tr>"
+//               }   
+//             }
+//             break;
 
-    //     if(feature[activeTab.selection+'DIST'] =='32B'){
-    //       content += "<tr><td>The Minnesota Supreme Court has determined that a vacancy in nomination exists for Legislative District 32B under Minnesota Statutes 204B.13 due to a candidate being ineligible to hold the office. The Governor has issued a Writ of Special Election which schedules the election for February 14, 2017.</td><tr>";
-    //     } else {
-    //       content += "<tr>"+geography+"</tr>";
-    //       content += "<tr><th>"+unit+" Winner: </th><td class='winner-"+winner+"'>"+winner+" </td></tr>";
-    //       content += "<tr><th>Percentage: </th><td class='winner-"+winner+"'>"+percentage.toFixed(1)+"% </td></tr>";
-    //   for (var i=0;i<partyArray.length;i++){
-    //       if(feature[activeTab.selection+partyArray[i]] > 0){
-    //         content +="<tr><th>"+partyObject[partyArray[i]]+': </th><td>'+feature[activeTab.selection+partyArray[i]].toLocaleString()+"</td></tr>";
-    //       }     
-    //     }
-    //       content += "<tr><th>Total Votes: </th><td>"+feature[activeTab.selection+'TOTAL'].toLocaleString()+"</td></tr>";
-    //     }
-    //     break;
-    }
+
+//     }
 
   $("#results").html(content);
   // district += feature.properties.SENDIST
   // content += "<tr><th>Total Votes: </th><td>"+feature[activeSelect.selection+'TOTAL'].toLocaleString()+"</td></tr>";
 
+}
+
+function removeLayers(c){
+
+  switch (c){
+    case'all':
+        map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography]]);
+        map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ['==', 'FeatType', activeSelect.geography], ["in", "District", ""]])
+
+        $('#results').html("");
+        // $('#precinct-results').html("");
+        $('#clear').hide();
+
+        // if(activeTab.selection == 'USPRS' || activeTab.selection == 'USSEN'){
+        //   $('#candidate-table').show();
+        // } else{
+        //   $('#candidate-table').hide();
+        // }
+    //remove old pushpin and previous selected district layers 
+    if (typeof map.getSource('pointclick') !== "undefined" ){ 
+      // console.log('remove previous marker');
+      map.removeLayer('pointclick');    
+      map.removeSource('pointclick');
+    }   
+    break;    
+    case 'pushpin':
+    //remove old pushpin and previous selected district layers 
+    if (typeof map.getSource('pointclick') !== "undefined" ){ 
+      // console.log('remove previous marker');
+      map.removeLayer('pointclick');    
+      map.removeSource('pointclick');
+    }
+    break;
+  }    
 }
 
 

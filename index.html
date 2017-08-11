@@ -79,9 +79,9 @@
           <ul class="election-navigation">
             <!-- <li><a class="election-navigation-a active" data-district="USPRS" data-geography="cty" data-name="COUNTYNAME">Presidential</a></li>
             <li><a class="election-navigation-a" data-district="USSEN" data-geography="cty" data-name="COUNTYNAME">U.S. Senate</a></li> -->
-            <li><a class="election-navigation-a active" data-district="USREP" data-geography="cng" data-name="CONGDIST">U.S. Congress</a></li>
-            <li><a class="election-navigation-a" data-district="MNSEN" data-geography="sen" data-name="MNSENDIST">MN Senate</a></li>
-            <li><a class="election-navigation-a" data-district="MNLEG" data-geography="hse" data-name="MNLEGDIST">MN House</a></li>
+            <li><a class="election-navigation-a active" data-district="USREP" data-geography="Con" data-name="CONGDIST">U.S. Congress</a></li>
+            <li><a class="election-navigation-a" data-district="MNSEN" data-geography="Sen" data-name="MNSENDIST">MN Senate</a></li>
+            <li><a class="election-navigation-a" data-district="MNLEG" data-geography="Hos" data-name="MNLEGDIST">MN House</a></li>
           </ul>
         </div>
         <!-- <div class="col-sm-2"></div> -->
@@ -89,15 +89,15 @@
       </div>
 
       <div class="headline">
-          <h1 class="headline-title">This is a great big title.</h1>
+          <h1 class="headline-title">Compactness Measures.</h1>
           <p class="lead">Use this document as a way to quickly start any new mapping project.<br> It provides this text, sidebar navigation, and a Mapbox GL map.</p>
       </div>
      
       <div class="container-fluid">
       <div class="row">
       <!-- <div class="col-sm-1"></div> -->
-<!--       <div class="prefix">
- -->      <div class="affix-container"> <!--data-spy="affix" data-offset-top="150"-->
+      <div class="prefix">
+      <div class="affix-container" data-spy="affix" data-offset-top="210" data-offset-top="100">
 
         <div class="col-sm-3 sidebar">
           <div class="sidebar-results">
@@ -113,6 +113,7 @@
               </span>
             </div> --><!-- /input-group -->
             <table id='results' class="table-condensed"></table>
+            <span id="clear" >Clear <i class="fa fa-times" aria-hidden="true"></i></span>
           </div>
           
 
@@ -128,16 +129,15 @@
 			  <option value="1994">1994</option>
 			</select>
 		<select id="dropcompactness">
-		  <option value="measure2">Polsby-Popper</option>
-		  <option value="measure1">Convex Hull</option>
-		  <option value="1994">1994</option>
+		  <option value="Polsby-Pop">Polsby-Popper</option>
+		  <option value="ConvexHull">Convex Hull</option>
 		</select>
 
 
         <div id="map" class="col-sm-9 map-container"></div>
 
-<!--       </div>
- -->      <!-- <div class="col-sm-1"></div> -->
+      </div>
+      <!-- <div class="col-sm-1"></div> -->
       </div>
   
     <footer>
