@@ -50,21 +50,33 @@ $( document ).ready(function() {
 
     $('#dropcompactness').on('change', function(e){
       e.preventDefault();
-      //remove previous selections map methods give an example of how one would toggle layers
-      document.getElementById('features').innerHTML = "";
-      map.removeLayer(activeSelect.geography+"-"+activeSelect.year);
-      map.removeLayer(activeSelect.geography+"-highlighted-"+activeSelect.year);
-      spliceArray(activeSelect.geography+"-"+activeSelect.year);
-      spliceArray(activeSelect.geography+"-highlighted-"+activeSelect.year);
-
       activeSelect.paintProperty = $(this).val();
+      if(activeSelect.paintProperty == 'measure1'){
+        activeSelect.paintStops = [[0, '#ffffcc'],[1, '#a1dab4']];
+      } else {
+        activeSelect.paintStops = [[0, '#ffffcc'],[.25, '#a1dab4'],[.50, '#41b6c4'],[.75, '#2c7fb8'], [1, '#253494']];
+      }
+      
+      map.setPaintProperty(activeSelect.geography+"-"+activeSelect.year, 
+                          "fill-color", {"type":activeSelect.paintType,
+                                            "property": activeSelect.paintProperty,
+                                            "stops": activeSelect.paintStops})//ults', filter: ['has','COUNTYNAME']})
 
-        var layer = [
-  [activeSelect.geography,'fill', ['==','Year',activeSelect.year],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
-  [activeSelect.geography+"-highlighted", 'fill',["in", "DISTRICT", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
-    ];
+      //remove previous selections map methods give an example of how one would toggle layers
+      // document.getElementById('features').innerHTML = "";
+      // map.removeLayer(activeSelect.geography+"-"+activeSelect.year);
+      // map.removeLayer(activeSelect.geography+"-highlighted-"+activeSelect.year);
+      // spliceArray(activeSelect.geography+"-"+activeSelect.year);
+      // spliceArray(activeSelect.geography+"-highlighted-"+activeSelect.year);
 
-  layer.forEach(addLayer)
+      // activeSelect.paintProperty = $(this).val();
+
+  //       var layer = [
+  // [activeSelect.geography,'fill', ['==','Year',activeSelect.year],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
+  // [activeSelect.geography+"-highlighted", 'fill',["in", "DISTRICT", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
+  //   ];
+
+  // layer.forEach(addLayer)
 
     })
 
