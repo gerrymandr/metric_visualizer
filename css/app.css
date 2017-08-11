@@ -14,6 +14,9 @@ html, body {
 	z-index:2;
 	left:28%;
 }
+#dropcompactness{
+	margin-left:63px;
+}
 
 .container-fluid{
 	margin-left: 5%;

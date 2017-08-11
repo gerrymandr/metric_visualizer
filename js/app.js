@@ -2,7 +2,6 @@ var activeSelect = {
   paintType:"exponential",
   paintProperty:"measure2",
   paintStops:[[0, '#ffffcc'],[.25, '#a1dab4'],[.50, '#41b6c4'],[.75, '#2c7fb8'], [1, '#253494']],
-  selection:"USREP",
   geography:"cng",
   year:2012,
   name:"COUNTYNAME"
@@ -93,7 +92,7 @@ function addLayer(layer) {
             "layout": {},
             "paint": layer[3],
            }, 'waterway-label');
-           
+
            layersArray.push(layer[0] +'-'+ activeSelect.year);
            
 };
@@ -110,8 +109,8 @@ function mapResults(feature){
   // console.log(feature.layer.id)
   switch (feature.layer.id) {
       case activeSelect.geography+"-"+activeSelect.year:
-          map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', 2012], ["!=", "DISTRICT",feature.properties.DISTRICT]]);
-          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', 2012], ["==", "DISTRICT",feature.properties.DISTRICT]]);
+          map.setFilter(activeSelect.geography+"-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ["!=", "DISTRICT",feature.properties.DISTRICT]]);
+          map.setFilter(activeSelect.geography+"-highlighted-"+activeSelect.year, ['all', ['==', 'Year', activeSelect.year], ["==", "DISTRICT",feature.properties.DISTRICT]]);
           break;
       case activeSelect.geography+"-highlighted-"+activeSelect.year:
           break;
@@ -128,7 +127,7 @@ function showResults(activeSelect, featureProperties){
   var district = '';
 
   var data = {
-    activeTab:activeSelect.selection,
+    // activeTab:activeSelect.selection,
     geography:activeSelect.geography
   };
   
@@ -148,8 +147,8 @@ function showResults(activeSelect, featureProperties){
   //   }   
   // }
 
-switch (activeSelect.selection) {
-    case "USREP":
+switch (activeSelect.geography) {
+    case "cng":
           for (attributes in featureProperties){
               if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/district/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){
                 content += "";
@@ -199,6 +198,8 @@ switch (activeSelect.selection) {
   // content += "<tr><th>Total Votes: </th><td>"+feature[activeSelect.selection+'TOTAL'].toLocaleString()+"</td></tr>";
 
 }
+
+
 
  
 

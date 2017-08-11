@@ -33,11 +33,38 @@ $( document ).ready(function() {
       document.getElementById('features').innerHTML = "";
       map.removeLayer(activeSelect.geography+"-"+activeSelect.year);
       map.removeLayer(activeSelect.geography+"-highlighted-"+activeSelect.year);
+      spliceArray(activeSelect.geography+"-"+activeSelect.year);
+      spliceArray(activeSelect.geography+"-highlighted-"+activeSelect.year);
 
       activeSelect.year = parseInt($(this).val());
+      // ['all', ["in", "DISTRICT", ""], ['==','Year',activeSelect.year]]
 
-      // map.removeLayer("2012results-"+ activeTab.geography);
-      // map.removeLayer("2012results-"+ activeTab.geography+"-hover");
+        var layer = [
+  [activeSelect.geography,'fill', ['==','Year',activeSelect.year],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
+  [activeSelect.geography+"-highlighted", 'fill',['all', ["in", "DISTRICT", ""], ['==','Year',activeSelect.year]],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
+    ];
+
+  layer.forEach(addLayer)
+
+    });
+
+    $('#dropcompactness').on('change', function(e){
+      e.preventDefault();
+      //remove previous selections map methods give an example of how one would toggle layers
+      document.getElementById('features').innerHTML = "";
+      map.removeLayer(activeSelect.geography+"-"+activeSelect.year);
+      map.removeLayer(activeSelect.geography+"-highlighted-"+activeSelect.year);
+      spliceArray(activeSelect.geography+"-"+activeSelect.year);
+      spliceArray(activeSelect.geography+"-highlighted-"+activeSelect.year);
+
+      activeSelect.paintProperty = $(this).val();
+
+        var layer = [
+  [activeSelect.geography,'fill', ['==','Year',activeSelect.year],{"fill-color": {"type":activeSelect.paintType,"property": activeSelect.paintProperty,"stops": activeSelect.paintStops}, "fill-outline-color": "#fff","fill-opacity":0.75}],
+  [activeSelect.geography+"-highlighted", 'fill',["in", "DISTRICT", ""],{"fill-color": 'brown',"fill-outline-color": "#fff","fill-opacity":1}]
+    ];
+
+  layer.forEach(addLayer)
 
     })
 
