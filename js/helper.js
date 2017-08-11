@@ -27,6 +27,20 @@ $( document ).ready(function() {
     	console.log(activeSelect);
     })
 
+    $('#dropyear').on('change', function(e){
+      e.preventDefault();
+      //remove previous selections map methods give an example of how one would toggle layers
+      document.getElementById('features').innerHTML = "";
+      map.removeLayer(activeSelect.geography+"-"+activeSelect.year);
+      map.removeLayer(activeSelect.geography+"-highlighted-"+activeSelect.year);
+
+      activeSelect.year = parseInt($(this).val());
+
+      // map.removeLayer("2012results-"+ activeTab.geography);
+      // map.removeLayer("2012results-"+ activeTab.geography+"-hover");
+
+    })
+
   //mousemove is too slow
   map.on('click', function (e) {
     // console.log(e.point)

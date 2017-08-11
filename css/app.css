@@ -9,6 +9,12 @@ html, body {
 #results{
 	font-size:10px;
 }
+#dropyear{
+	position: absolute;
+	z-index:2;
+	left:28%;
+}
+
 .container-fluid{
 	margin-left: 5%;
 	margin-right:5%;
@@ -80,7 +86,7 @@ a:hover {
 }
 
 .dropdown-menu{
-	margin: 25px 0 0;
+	/*margin: 25px 0 0;*/
 }
 .btn-group.open .dropdown-toggle {
     box-shadow: none;
