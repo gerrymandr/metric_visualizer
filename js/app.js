@@ -165,13 +165,13 @@ function removeLayers(c){
 function setPopupHtml(feature){
   switch (feature.properties.FeatType){
     case'Con':
-        return feature.properties.Year + ' Congressional District: ' + feature.properties.District +"<br><i> Click for details</i>"
+        return feature.properties.Year + ' Congressional District: ' + feature.properties.District +"<br><i> Click for details</i>";
     break;
     case'Sen':
-        return feature.properties.Year + ' Minnesota Senate District: ' + feature.properties.District
+        return feature.properties.Year + ' Minnesota Senate District: ' + feature.properties.District+"<br><i> Click for details</i>";
     break;
     case'Hos':
-        return feature.properties.Year + ' Minnesota House District: ' + feature.properties.District
+        return feature.properties.Year + ' Minnesota House District: ' + feature.properties.District+"<br><i> Click for details</i>";
     break; 
   }
   
