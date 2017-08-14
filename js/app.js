@@ -80,13 +80,10 @@ function initialize(){
             "fill-outline-color": "#fff",
             "fill-opacity":0.75
           }],
-            //create {layer}-highlighted layer to toggle selected districts in app
+        //create {layer}-highlighted layer to toggle selected districts in app
         [activeSelect.geography+"-highlighted", 'fill',["in", "District", ""],{"fill-color": '#ff6600',"fill-outline-color": "#fff","fill-opacity":1}]]      
 
-        layers.forEach(addLayer);
-
-        // Create a popup, but don't add it to the map yet.
-    
+        layers.forEach(addLayer);    
   });//end map on load
 } //end initialize
 
@@ -94,14 +91,14 @@ function addLayer(layer) {
            map.addLayer({
             "id": layer[0] +'-'+ activeSelect.year, //layer names take the form: geography-year, ex: cng-2012
             "type": layer[1],
-            "source": "mnleg_cng",
+            "source": "mnleg_cng",   //layer id from map.addSource()
             "source-layer": "final", //layer name in studio
             'filter': layer[2],
             "layout": {},
             "paint": layer[3],
-           }, 'waterway-label'); //place above this layer (within mapbox://styles/mggg/cj66qmslq7fh82ss33qbqlxoc basemap style)
+           }, 'waterway-label'); //place overlay layers above this layer, baked into basemap from Mapbox Studio
 
-           layersArray.push(layer[0] +'-'+ activeSelect.year);           
+           layersArray.push(layer[0] +'-'+ activeSelect.year); //place layer name inside layersArray to add/remove/edit later          
 };
 
 //remove layersArray element per 0.22.0
@@ -127,15 +124,6 @@ function mapResults(feature){
 function showResults(activeSelect, featureProperties){
   // console.log(activeSelect)
   var content = '';
-  var header ='';
-  var district = '';
-
-  var data = {
-    // activeTab:activeSelect.selection,
-    geography:activeSelect.geography
-  };
-  
-  header += "<h5>Results</h5>";
 
   for (attributes in featureProperties){
     if( attributes.match(/MNSENDIST/gi) || attributes.match(/OBJECTID/gi) || attributes.match(/Shape_Area/gi) || attributes.match(/Shape_Leng/gi) || attributes.match(/SENDIST/gi) || attributes.match(/memid/gi) || attributes.match(/name/gi) || attributes.match(/party/gi)){

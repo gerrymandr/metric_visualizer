@@ -80,15 +80,10 @@ $( document ).ready(function() {
   //mousemove is too slow
   map.on('click', function (e) {
     $('#clear').show();
-    // console.log(e.point)
     var features = map.queryRenderedFeatures(e.point,{ layers: layersArray }); //queryRenderedFeatures returns an array
-    // var feature = features[0];
     var feature = (features.length) ? features[0] : '';
-    // console.log(feature.properties);
-    // removeLayers('pushpin');
     mapResults(feature);
-    showResults(activeSelect, feature.properties);
-       
+    showResults(activeSelect, feature.properties);  
   });
 
     //show pointer cursor

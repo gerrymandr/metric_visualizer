@@ -7,7 +7,7 @@ html, body {
 }
 
 #results{
-	font-size:12px;
+	font-size:.85rem;
 }
 #dropyear{
 	position: absolute;
