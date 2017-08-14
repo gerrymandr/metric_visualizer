@@ -11,6 +11,23 @@ var layersArray = []; // at 0.22.0 you can no longer have undefined layers in ar
 
 var zoomThreshold = 8;
 
+var markerHeight = 50, markerRadius = 10, linearOffset = 25;
+var popupOffsets = {
+ 'top': [0, 0],
+ 'top-left': [0,0],
+ 'top-right': [0,0],
+ 'bottom': [0, -markerHeight],
+ 'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+ 'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+ 'left': [markerRadius, (markerHeight - markerRadius) * -1],
+ 'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+ };
+
+var popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        offset:popupOffsets
+    });
 
 function initialize(){
 
@@ -37,36 +54,39 @@ function initialize(){
     minZoom: 6
   });
 
-    var nav = new mapboxgl.NavigationControl({position: 'top-right'}); // position is optional
-    map.addControl(nav);
+  var nav = new mapboxgl.NavigationControl({position: 'top-right'}); // position is optional
+  map.addControl(nav);
 
-    map.on('load', function () {
-      // add vector source:
-      map.addSource('mnleg_cng', {
-          type: 'vector',
-          url: 'mapbox://mggg.cj689nea60dqo2qryo5m6zsj4-0z2dc'
-      });
+  map.on('load', function () {
+    // add vector source:
+    map.addSource('mnleg_cng', {
+        type: 'vector',
+        url: 'mapbox://mggg.cj689nea60dqo2qryo5m6zsj4-0z2dc'
+    });
 
-      var layers = [
-          //create layers array to load multiple layers
-          //see https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-fill            
-          [
-            activeSelect.geography,                   //layers[0] = id
-            'fill',                                   //layer[1]            
-            ['all', ['==', 'Year', 2012], ["==", "FeatType", activeSelect.geography]],  //layers[2] = filter
-            {"fill-color": {                          //layers[3] = paint object
-                "type":activeSelect.paintType,
-                "property": activeSelect.paintProperty,
-                "stops": activeSelect.paintStops
-                }, 
+    var layers = [
+        //create layers array to load multiple layers
+        //see https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-fill            
+        [
+          activeSelect.geography,                   //layers[0] = id
+          'fill',                                   //layer[1]            
+          ['all', ['==', 'Year', 2012], ["==", "FeatType", activeSelect.geography]],  //layers[2] = filter
+          { "fill-color": {                          //layers[3] = paint object
+              "type":activeSelect.paintType,
+              "property": activeSelect.paintProperty,
+              "stops": activeSelect.paintStops
+              }, 
             "fill-outline-color": "#fff",
-                  "fill-opacity":0.75
-            }],
+            "fill-opacity":0.75
+          }],
             //create {layer}-highlighted layer to toggle selected districts in app
-            [activeSelect.geography+"-highlighted", 'fill',["in", "District", ""],{"fill-color": '#ff6600',"fill-outline-color": "#fff","fill-opacity":1}]]      
+        [activeSelect.geography+"-highlighted", 'fill',["in", "District", ""],{"fill-color": '#ff6600',"fill-outline-color": "#fff","fill-opacity":1}]]      
 
         layers.forEach(addLayer);
-    });//end map on load
+
+        // Create a popup, but don't add it to the map yet.
+    
+  });//end map on load
 } //end initialize
 
 function addLayer(layer) {             
@@ -140,9 +160,4 @@ function removeLayers(c){
     break;    
   }    
 }
-
-
-
- 
-
 
