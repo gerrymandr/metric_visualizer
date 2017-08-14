@@ -100,9 +100,11 @@ $( document ).ready(function() {
 
     if (typeof(feature) != 'string'){
         popup.setLngLat(e.lngLat)
-            .setHTML(feature.properties.Year + ' ' + feature.properties.FeatType + ' District: ' + feature.properties.District)
+            .setHTML(setPopupHtml(feature))
             .addTo(map);
-    } else {}  
+    } else {
+      popup.remove()
+    }  
   });
 
    //show grab cursor

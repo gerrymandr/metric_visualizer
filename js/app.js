@@ -11,12 +11,12 @@ var layersArray = []; // at 0.22.0 you can no longer have undefined layers in ar
 
 var zoomThreshold = 8;
 
-var markerHeight = 50, markerRadius = 10, linearOffset = 25;
+var markerHeight = 30, markerRadius = 10, linearOffset = 5;
 var popupOffsets = {
  'top': [0, 0],
  'top-left': [0,0],
  'top-right': [0,0],
- 'bottom': [0, -markerHeight],
+ 'bottom': [0, 0],
  'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
  'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
  'left': [markerRadius, (markerHeight - markerRadius) * -1],
@@ -26,6 +26,7 @@ var popupOffsets = {
 var popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false,
+        anchor:'bottom-left',
         offset:popupOffsets
     });
 
@@ -159,5 +160,20 @@ function removeLayers(c){
         $('#clear').hide(); 
     break;    
   }    
+}
+
+function setPopupHtml(feature){
+  switch (feature.properties.FeatType){
+    case'Con':
+        return feature.properties.Year + ' Congressional District: ' + feature.properties.District +"<br><i> Click for details</i>"
+    break;
+    case'Sen':
+        return feature.properties.Year + ' Minnesota Senate District: ' + feature.properties.District
+    break;
+    case'Hos':
+        return feature.properties.Year + ' Minnesota House District: ' + feature.properties.District
+    break; 
+  }
+  
 }
 
