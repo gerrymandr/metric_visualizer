@@ -8,12 +8,11 @@ There are many different metrics that attempt to measure how weird-looking
  [convexity](https://www.maa.org/sites/default/files/pdf/upload_library/22/Polya/Hodge2011.pdf), or
  [bizarreness](http://people.hss.caltech.edu/~alan/bizarreness.pdf),
  all of the algorithms do a similar thing: They take in a set of geometries defining the 
- districts of a plan, and return a number for each district which corresponds to how much suspicion of 
+ districts of a plan, and return a number for each district indicating how much suspicion of 
  gerrymandering should be given to the district.
  
-A library of such metrics can be found in the python-mander repository in this project. What this project attempts
-to do is provide a way to quickly apply a set of algorithms once implemented on real-wold data, and present the results 
-in an easy to comprehend manner.
+A library of such metrics can be found in the python-mander repository in this project. This project
+ provides a pipeline for applying such algorithms to real-world data and comparing to other existing algorithms.
 
 <p align="center">
   <img src="https://github.com/gerrymandr/metric_visualizer/blob/master/img/display.jpg" alt="mimimal view" width="80%"/>
