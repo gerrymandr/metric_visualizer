@@ -40,11 +40,14 @@ algorithm is sensitive to data complexity that is made obvious quickly.
 * Update the website to add Scatter plots comparing pairs of metrics and other visualizations characterizing the 
 results of each algorithm.
 
-## Strech goals: 
+## Strech goals
 
 * Extract out also demographic data, and come up with visualizations that display that compare demographic data with 
 the convexity measures
 * Make the interface for implementing new metrics more intuative. 
 
 
+### Primary Contacts
+
 solbrigm@gmail.com
+cantey0701@gmail.com
