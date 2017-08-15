@@ -41,9 +41,9 @@ results of each algorithm.
 
 ## Strech goals
 
-* Extract out also demographic data, and come up with visualizations that display that compare demographic data with 
+* Extract demographic data, and come up with visualizations that compare demographic data with 
 the convexity measures
-* Make the interface for implementing new metrics more intuative. 
+* Make the interface for implementing new metrics more intuitive. 
 
 
 ### Primary Contacts
