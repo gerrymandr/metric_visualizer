@@ -2,7 +2,7 @@
 
 ## Purpose
 
-There are many different metrics for measuring attempting to measure how weird-looking
+There are many different metrics that attempt to measure how weird-looking
  a district is. Whether measuring 
  [compactness](https://pdfs.semanticscholar.org/3db5/6f1a76229e6dbab7e8711bea315efdde6ad2.pdf),
  [convexity](https://www.maa.org/sites/default/files/pdf/upload_library/22/Polya/Hodge2011.pdf), or
@@ -11,9 +11,9 @@ There are many different metrics for measuring attempting to measure how weird-l
  districts of a plan, and return a number for each district which corresponds to how much suspicion of 
  gerrymandering should be given to the district.
  
-A library such metrics can be found in the python-mander repository in this project. What this project attempts
-to do is provide a way to quickly apply a set of algorithms once implemented on real-wold data, and those results in an
-easy to comprehend manner.
+A library of such metrics can be found in the python-mander repository in this project. What this project attempts
+to do is provide a way to quickly apply a set of algorithms once implemented on real-wold data, and present the results 
+in an easy to comprehend manner.
 
 <p align="center">
   <img src="https://github.com/gerrymandr/metric_visualizer/blob/master/img/display.jpg" alt="mimimal view" width="80%"/>
