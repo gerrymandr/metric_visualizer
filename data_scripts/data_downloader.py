@@ -29,7 +29,7 @@ class GerryData:
         os.mkdir(self.raw_dir)
         os.mkdir(self.extracted_dir)
 
-    def download_data(self, url, file_name):
+    def download_data(self, file_name, url):
         """Downloads file_name.zip from base_url.file_name.zip, downloads to folder RawData in root"""
 
         destination_dir = os.path.join(self.root, 'RawData')
@@ -76,10 +76,13 @@ class GerryData:
 
 if __name__ == "__main__":
     foo = GerryData()
-    file_urls = csv.reader('url_list.csv')
 
-    for k, v in file_urls.items():
-        foo.download_data(v, k)
+    with open('url_list.csv', 'r') as f:
+        file_urls = list(csv.reader(f))
+
+    for k in file_urls:
+        print(k)
+        foo.download_data(*k)
 
     foo.process_raw()
     os.rename(os.path.join(foo.raw_dir, 'C2002', 'C2002.DBF'),
