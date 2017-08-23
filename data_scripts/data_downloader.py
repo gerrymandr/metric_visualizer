@@ -13,10 +13,42 @@ else:
     from urllib import urlretrieve
 
 
+def download_file(out_dir, file_name, url):
+    """Downloads file_name from base_url.file_name.zip, downloads to folder RawData in root"""
+
+    if not os.path.exists(out_dir):
+        print('Creating new directory {}'.format(out_dir))
+        os.mkdir(out_dir)
+
+    print('downloading data from {}'.format(url))
+
+    filehandle, _ = urlretrieve(url)
+
+    split_name = os.path.splitext(file_name)
+    if split_name[1] == '.zip':
+        zip_ref = zipfile.ZipFile(filehandle, 'r')
+        zip_ref.extractall(os.path.join(out_dir, split_name[0]))
+    if split_name[1] == '.gz':
+        tar_ref = tarfile.open(filehandle, 'r:gz')
+        tar_ref.extractall(os.path.join(out_dir, split_name[0]))
+
+
+def _download_file(x):
+    """A wrapper for download_file that allows it to be used with multiprocessing"""
+    download_file('./RawData', *x)
+
+
+def download_files(file_list):
+    """Downloads a list of files structured as filename, url"""
+    p = Pool()
+    p.map(_download_file, file_list)
+
+
 class GerryData:
     """
 
     """
+
     def __init__(self, root='.'):
         print('root directory is {0}'.format(os.path.abspath(root)))
         self.root = root
@@ -34,30 +66,12 @@ class GerryData:
         """Downloads file_name from base_url.file_name.zip, downloads to folder RawData in root"""
 
         destination_dir = os.path.join(self.root, 'RawData')
-        if not os.path.exists(destination_dir):
-            print('Creating new directory {}'.format(destination_dir))
-            os.mkdir(destination_dir)
-
-        print('downloading data from {}'.format(url))
-
-        filehandle, _ = urlretrieve(url)
-
-        split_name = os.path.splitext(file_name)
-        if split_name[1] == '.zip':
-            zip_ref = zipfile.ZipFile(filehandle, 'r')
-            zip_ref.extractall(os.path.join(destination_dir, split_name[0]))
-        if split_name[1] == '.gz':
-            tar_ref = tarfile.open(filehandle, 'r:gz')
-            tar_ref.extractall(os.path.join(destination_dir, split_name[0]))
-
-    def _download_file(self, x):
-        """A wrapper for download_file that allows it to be used with multiprocessing"""
-        self.download_file(*x)
+        download_file(destination_dir, file_name, url)
 
     def down_files(self, file_list):
         """Downloads a list of files structured as filename, url"""
         p = Pool(1)
-        p.map(self._download_file, file_list)
+        p.map(_download_file, file_list)
 
     def process_raw(self):
         """"
@@ -86,17 +100,15 @@ class GerryData:
 
         print(f_out)
 
+
 if __name__ == "__main__":
     foo = GerryData()
 
     with open('url_list.csv', 'r') as f:
         file_urls = list(csv.reader(f))
 
-    foo.down_files(file_urls)
+    download_files(file_urls)
 
     foo.process_raw()
     os.rename(os.path.join(foo.raw_dir, 'C2002', 'C2002.DBF'),
               os.path.join(foo.raw_dir, 'C2002', 'c2002.dbf'))
-
-
-
