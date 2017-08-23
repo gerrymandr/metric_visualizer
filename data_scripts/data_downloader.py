@@ -1,11 +1,14 @@
 import shutil
-try:
-    from urllib.request import urlopen
-except:
-    from urllib2 import urlopen
-import zipfile
+import sys
 import os
-from contextlib import closing
+import zipfile
+
+print(sys.version_info)
+PY3 = sys.version_info > (3,)
+if PY3:
+    from urllib.request import urlretrieve
+else:
+    from urllib import urlretrieve
 
 
 class GerryData:
@@ -13,6 +16,7 @@ class GerryData:
 
     """
     def __init__(self, root='.'):
+        print('root directory is {0}'.format(os.path.abspath(root)))
         self.root = root
         self.raw_dir = os.path.join(self.root, 'RawData')
         self.extracted_dir = os.path.join(self.root, 'ExtractedData')
@@ -28,31 +32,18 @@ class GerryData:
         """Downloads file_name.zip from base_url.file_name.zip, downloads to folder RawData in root"""
 
         destination_dir = os.path.join(self.root, 'RawData')
-        try:
-            os.stat(destination_dir)
-        except OSError:
-            print('Did not find directory, creating new directory {}'.format(destination_dir))
+        if not os.path.exists(destination_dir):
+            print('Creating new directory {}'.format(destination_dir))
             os.mkdir(destination_dir)
 
-        f_out = os.path.join(destination_dir, file_name+'.zip')
+        print('downloading data from {}'.format(url))
 
-        print('downloading data from {0}, writing to {1}'.format(url, f_out))
-        with closing(urlopen(url)) as r:
-            with open(f_out, 'wb') as f:
-                shutil.copyfileobj(r, f)
-        self.extract_data(destination_dir)
+        filehandle, _ = urlretrieve(url)
 
-    @staticmethod
-    def extract_data(directory):
-        """unzips all zip files in a folder"""
-
-        zip_files = [f for f in os.listdir(directory) if f.endswith('.zip')]
-        for z in zip_files:
-            zip_ref = zipfile.ZipFile(os.path.join(directory, z), 'r')
-            file_name = os.path.splitext(z)[0]
-            print('extracting data to {0}'.format(file_name))
-            zip_ref.extractall(os.path.join(directory, file_name))
-            zip_ref.close()
+        split_name = os.path.splitext(file_name)
+        if split_name[1] == '.zip':
+            zip_ref = zipfile.ZipFile(filehandle, 'r')
+            zip_ref.extractall(os.path.join(destination_dir, split_name[0]))
 
     def process_raw(self):
         """"
@@ -84,15 +75,15 @@ class GerryData:
 
 if __name__ == "__main__":
     foo = GerryData()
-    file_urls = {'C2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/congress/C2012/C2012.zip',
-                 'C2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/C2002.zip',
-                 'C1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip',
-                 'S2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/legislative/L2012/S2012.zip',
-                 'S2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S2002.zip',
-                 'S1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S1994.zip',
-                 'L2012': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2012-1.zip',
-                 'L2002': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2002.zip',
-                 'L1994': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L1994.zip'
+    file_urls = {'C2012.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/congress/C2012/C2012.zip',
+                 'C2002.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/C2002.zip',
+                 'C1994.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip',
+                 'S2012.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/legislative/L2012/S2012.zip',
+                 'S2002.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S2002.zip',
+                 'S1994.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S1994.zip',
+                 'L2012.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2012-1.zip',
+                 'L2002.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2002.zip',
+                 'L1994.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L1994.zip'
     }
 
     for k, v in file_urls.items():
