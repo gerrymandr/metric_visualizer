@@ -122,7 +122,7 @@ function mapResults(feature){
 }
 
 function showResults(activeSelect, featureProperties){
-  // console.log(activeSelect)
+  console.log(featureProperties)
   var content = '';
 
   for (attributes in featureProperties){
