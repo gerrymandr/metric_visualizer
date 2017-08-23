@@ -5,6 +5,7 @@ import zipfile
 import csv
 from multiprocessing import Pool
 import tarfile
+import argparse
 
 PY3 = sys.version_info > (3,)
 if PY3:
@@ -102,13 +103,23 @@ class GerryData:
 
 
 if __name__ == "__main__":
-    foo = GerryData()
+    parser = argparse.ArgumentParser(description='Extacts fils from list of urls')
+    parser.add_argument('--out', default='.',
+                        help='where to write files to (default: current working directory)')
+    parser.add_argument('--file_list', default='./url_list.csv',
+                        help='List of file names and urls to download. '
+                             'Format: <FileName>,<url> '
+                             'no spaces, no quotation marks. (default: ./url_list.csv')
 
-    with open('url_list.csv', 'r') as f:
+    args = parser.parse_args()
+
+    downloader = GerryData(args.out)
+
+    with open(args.file_list, 'r') as f:
         file_urls = list(csv.reader(f))
 
     download_files(file_urls)
 
-    foo.process_raw()
-    os.rename(os.path.join(foo.raw_dir, 'C2002', 'C2002.DBF'),
-              os.path.join(foo.raw_dir, 'C2002', 'c2002.dbf'))
+    #foo.process_raw()
+    #os.rename(os.path.join(foo.raw_dir, 'C2002', 'C2002.DBF'),
+    #          os.path.join(foo.raw_dir, 'C2002', 'c2002.dbf'))
