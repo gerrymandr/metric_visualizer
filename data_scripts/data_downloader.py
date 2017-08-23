@@ -3,8 +3,9 @@ import sys
 import os
 import zipfile
 import csv
+from multiprocessing import Pool
+import tarfile
 
-print(sys.version_info)
 PY3 = sys.version_info > (3,)
 if PY3:
     from urllib.request import urlretrieve
@@ -29,8 +30,8 @@ class GerryData:
         os.mkdir(self.raw_dir)
         os.mkdir(self.extracted_dir)
 
-    def download_data(self, file_name, url):
-        """Downloads file_name.zip from base_url.file_name.zip, downloads to folder RawData in root"""
+    def download_file(self, file_name, url):
+        """Downloads file_name from base_url.file_name.zip, downloads to folder RawData in root"""
 
         destination_dir = os.path.join(self.root, 'RawData')
         if not os.path.exists(destination_dir):
@@ -45,6 +46,18 @@ class GerryData:
         if split_name[1] == '.zip':
             zip_ref = zipfile.ZipFile(filehandle, 'r')
             zip_ref.extractall(os.path.join(destination_dir, split_name[0]))
+        if split_name[1] == '.gz':
+            tar_ref = tarfile.open(filehandle, 'r:gz')
+            tar_ref.extractall(os.path.join(destination_dir, split_name[0]))
+
+    def _download_file(self, x):
+        """A wrapper for download_file that allows it to be used with multiprocessing"""
+        self.download_file(*x)
+
+    def down_files(self, file_list):
+        """Downloads a list of files structured as filename, url"""
+        p = Pool(1)
+        p.map(self._download_file, file_list)
 
     def process_raw(self):
         """"
@@ -71,7 +84,6 @@ class GerryData:
         :return:
         """
 
-
         print(f_out)
 
 if __name__ == "__main__":
@@ -80,14 +92,11 @@ if __name__ == "__main__":
     with open('url_list.csv', 'r') as f:
         file_urls = list(csv.reader(f))
 
-    for k in file_urls:
-        print(k)
-        foo.download_data(*k)
+    foo.down_files(file_urls)
 
     foo.process_raw()
     os.rename(os.path.join(foo.raw_dir, 'C2002', 'C2002.DBF'),
               os.path.join(foo.raw_dir, 'C2002', 'c2002.dbf'))
 
-    # combine_data(foo)
 
 
