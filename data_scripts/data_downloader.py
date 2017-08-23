@@ -2,6 +2,7 @@ import shutil
 import sys
 import os
 import zipfile
+import csv
 
 print(sys.version_info)
 PY3 = sys.version_info > (3,)
@@ -75,16 +76,7 @@ class GerryData:
 
 if __name__ == "__main__":
     foo = GerryData()
-    file_urls = {'C2012.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/congress/C2012/C2012.zip',
-                 'C2002.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/C2002.zip',
-                 'C1994.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/con94.zip',
-                 'S2012.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/Redist2010/Plans/legislative/L2012/S2012.zip',
-                 'S2002.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S2002.zip',
-                 'S1994.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/S1994.zip',
-                 'L2012.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2012-1.zip',
-                 'L2002.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L2002.zip',
-                 'L1994.zip': 'ftp://ftp.commissions.leg.state.mn.us/pub/gis/shape/L1994.zip'
-    }
+    file_urls = csv.reader('url_list.csv')
 
     for k, v in file_urls.items():
         foo.download_data(v, k)
