@@ -53,3 +53,7 @@ class GerryData:
         """
 
         print(f_out)
+
+    # Fixes file names from the default datasource, allowing ogr tools to read it.
+    #os.rename(os.path.join(downloader.raw_dir, 'C2002', 'C2002.DBF'),
+    #          os.path.join(downloader.raw_dir, 'C2002', 'c2002.dbf'))
