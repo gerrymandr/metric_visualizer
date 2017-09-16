@@ -15,7 +15,7 @@ import sys
 import os
 import zipfile
 import csv
-from multiprocessing.dummy import Pool
+from multiprocessing import Pool
 import tarfile
 import argparse
 
@@ -85,13 +85,13 @@ if __name__ == "__main__":
     parser.add_argument('--out', default='./RawData',
                         help='where to write files to (default: ./RawData)')
     parser.add_argument('--file_list', default='./all.csv',
-                        help='List of file names and urls to download. '
-                             'Format: <FileName>,<url> '
-                             'no spaces, no quotation marks. (default: ./all.csv')
+                        help='Path to comma seperated value file containing list of file names and urls to download.'
+                             ' Default location: all.csv. File entries should be formatted as follows: <FileName>,<url>'
+                             ' no spaces')
     parser.add_argument('--clean_dir', default=False,
                         help='Delete and recreate the out directory if it already exists')
     parser.add_argument('--quote_char', default=None,
-                        help='Quote Character for file_list (default: None')
+                        help='Quote Character for file_list (default: None)')
 
     # parse arguments
     args = parser.parse_args()
@@ -105,8 +105,10 @@ if __name__ == "__main__":
 
     # read csv
     with open(args.file_list, 'r') as f:
-
-        file_urls = [row for row in csv.DictReader(f, quotechar=args.quote_char)]
+        if args.quote_char:
+            file_urls = [row for row in csv.DictReader(f, quotechar=args.quote_char)]
+        else:
+            file_urls = [row for row in csv.DictReader(f)]
         for row in file_urls:
             row.update({'out_dir': out_dir})
 
