@@ -28,24 +28,6 @@ have been provided to help the user identify patterns in the data. This is also 
 metrics to an unfamiliar audience. These are provided as a webpage. The officially maintained set of metrics will be 
 hosted for now at http://www.gis.leg.mn/iMaps/metricViz/#.
 
-## A few high-priority next steps:
-
-* Add more datasources to the data_downloader.py script to use as comparison, especially a full set of US Congressional 
-Districts
-* The processing code is currently in the form of a jupyter Notebook. This should be factored out into scripts:
-process_data.py, compute_metrics.py, and update_mapbox.py
-* Add a step to the process data script that simplifies the data to several different thresholds, so that if an 
-algorithm is sensitive to data complexity that is made obvious quickly.
-* Update the website to add Scatter plots comparing pairs of metrics and other visualizations characterizing the 
-results of each algorithm.
-
-## Strech goals
-
-* Extract demographic data, and come up with visualizations that compare demographic data with 
-the convexity measures
-* Make the interface for implementing new metrics more intuitive. 
-
-
 ### Primary Contacts
 
 solbrigm@gmail.com
